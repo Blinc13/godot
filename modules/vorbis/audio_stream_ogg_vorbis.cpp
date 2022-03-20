@@ -345,7 +345,6 @@ void AudioStreamOGGVorbis::maybe_update_info() {
 
 	vorbis_info info;
 	vorbis_comment comment;
-	int err;
 
 	vorbis_info_init(&info);
 	vorbis_comment_init(&comment);
@@ -361,13 +360,10 @@ void AudioStreamOGGVorbis::maybe_update_info() {
 		}
 		if (i == 0) {
 			packet->b_o_s = 1;
-		}
-
-		if (i == 0) {
 			ERR_FAIL_COND(!vorbis_synthesis_idheader(packet));
 		}
 
-		err = vorbis_synthesis_headerin(&info, &comment, packet);
+		int err = vorbis_synthesis_headerin(&info, &comment, packet);
 		ERR_FAIL_COND_MSG(err != 0, "Error parsing header packet " + itos(i) + ": " + itos(err));
 
 		packet_count++;
